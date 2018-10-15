@@ -8,14 +8,15 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input auto-complete="off" placeholder="请输入密码" prop="password" type="password" v-model="account.password">
+          <el-input auto-complete="off" placeholder="请输入密码" type="password" v-model="account.password">
           </el-input>
         </el-form-item>
         <!--<el-checkbox class="remember" v-model="checked">
           记住密码
         </el-checkbox>-->
         <el-form-item style="width: 100%;">
-          <el-button style="width: 100%;" type="primary" >
+          <el-button style="width: 100%;" type="primary" @click="handleLogin" :loading="logining"
+          >
             登录
           </el-button>
         </el-form-item>
@@ -25,6 +26,7 @@
 </template>
 
 <script>
+  import {requestLogin} from '../api/api'
   export default {
     name: "login",
     data() {
@@ -56,6 +58,35 @@
         },
         checked: false
       };
+    },
+    methods: {
+      handleLogin() {
+        this.$refs.account.validate((valid) => {
+            if (valid) {
+              this.logining = true;
+              let loginParams = {
+                username : this.account.username,
+                password : this.account.password
+              };
+              requestLogin(loginParams).then(data => {
+                  this.logining = false;
+                  let {msg, code, token} = data;
+                  if (code === 200) {
+                    sessionStorage.setItem('access-token', token);
+                    this.$router.push({path: '/home'});
+                  } else {
+                    this.$message({
+                      message: msg,
+                      type: 'error'
+                    });
+                  }
+                });
+            }else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+      }
     }
   }
 </script>
@@ -79,8 +110,8 @@
     text-align: left;
   }
 
-  .remember {
-    width: 250px;
-    text-align: left;
-  }
+  /*.remember {*/
+  /*width: 250px;*/
+  /*text-align: left;*/
+  /*}*/
 </style>
