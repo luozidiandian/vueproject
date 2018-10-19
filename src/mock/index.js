@@ -5,12 +5,11 @@ import {LoginUsers} from './data/user'
 export default {
   init() {
     let mock = new MockAdapter(axios);
-    mock.onGet('/success').reply(200, {
-      msg: 'success'
-    });
-    mock.onGet('./error').reply(500, {
-      msg: 'failure'
-    });
+
+
+    /**
+     * 登录页面测试
+     */
     mock.onPost('/user/login').reply(
       arg => {
         let {username, password} = JSON.parse(arg.data);
@@ -20,7 +19,7 @@ export default {
           let hasUser = LoginUsers.some(u => {
             if (u.username === username && u.password === password) {
               token = JSON.stringify(u);
-              return true;
+              return true
             }
           });
 
@@ -30,7 +29,6 @@ export default {
             resolve([200, {code: 500, msg: '账号或密码错误'}])
           }
         })
-      }
-    )
+      })
   }
 }

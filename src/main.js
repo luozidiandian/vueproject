@@ -6,14 +6,15 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Mock from './mock'
+import './assets/css/custom.css'
+
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Mock.init();
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
-});
+  new Vue({
+    el: '#app',
+    router,
+    render: h =>h(App)
+  });

@@ -15,8 +15,7 @@
           记住密码
         </el-checkbox>-->
         <el-form-item style="width: 100%;">
-          <el-button style="width: 100%;" type="primary" @click="handleLogin" :loading="logining"
-          >
+          <el-button style="width: 100%;" type="primary" @click="handleLogin" :loading="logining">
             登录
           </el-button>
         </el-form-item>
@@ -27,6 +26,7 @@
 
 <script>
   import {requestLogin} from '../api/api'
+
   export default {
     name: "login",
     data() {
@@ -62,56 +62,33 @@
     methods: {
       handleLogin() {
         this.$refs.account.validate((valid) => {
-            if (valid) {
-              this.logining = true;
-              let loginParams = {
-                username : this.account.username,
-                password : this.account.password
-              };
-              requestLogin(loginParams).then(data => {
-                  this.logining = false;
-                  let {msg, code, token} = data;
-                  if (code === 200) {
-                    sessionStorage.setItem('access-token', token);
-                    this.$router.push({path: '/home'});
-                  } else {
-                    this.$message({
-                      message: msg,
-                      type: 'error'
-                    });
-                  }
+          if (valid) {
+            this.logining = true;
+            let loginParams = {
+              username: this.account.username,
+              password: this.account.password
+            };
+
+            //发送axios请求
+            requestLogin(loginParams).then(data => {
+              this.logining = false;
+              let {msg, code, token} = data;
+              if (code === 200) {
+                sessionStorage.setItem('access-token', token);
+                this.$router.push({path: '/app'});//页面跳转至后台主页面
+              } else {
+                this.$message({
+                  message: msg,
+                  type: 'error'
                 });
-            }else {
-              console.log('error submit!!');
-              return false;
-            }
-          });
+              }
+            });
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       }
     }
   }
 </script>
-
-<style scoped>
-  .login-container {
-    -webkit-border-radius: 5px;
-    border-radius: 15px;
-    -moz-border-radius: 5px;
-    background-clip: padding-box;
-    margin: 180px auto;
-    width: 350px;
-    padding: 35px 35px 15px 35px;
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-  }
-
-  label {
-    width: 70px;
-    text-align: left;
-  }
-
-  /*.remember {*/
-  /*width: 250px;*/
-  /*text-align: left;*/
-  /*}*/
-</style>

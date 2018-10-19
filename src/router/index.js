@@ -1,20 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '../components/Login'
-import Home from '../components/Home'
+import {SystemRouter} from './systemRouter'
 
 Vue.use(Router);
+let routesArr = [];
+SystemRouter.forEach(function (value) {
+    routesArr.push(value);
+  }
+);
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: '登录',
-      component: Login
-    },{
-      path:'/home',
-      name:'后台登录主界面',
-      component: Home
-    }
-  ]
-})
+const router = new Router({
+  routes: routesArr
+});
+export default router
