@@ -1,9 +1,7 @@
 import Menu from '../components/Menu'
 import ErrorPage from '../components/ErrorPage'
 import Login from '../components/Login'
-import Home from '../components/Home'
 import User from '../components/User'
-import App from '../App'
 
 const SystemRouter = [
   {
